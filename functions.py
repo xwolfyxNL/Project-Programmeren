@@ -13,15 +13,26 @@ def checkin(bikeID, name, phonenumber, Securitycode):
 
 def checkout():
 
-def fetchpersonalinfo():
-
-def securitycode(bikeid, securitycode):
+def fetchpersonalinfo(bikeid):
     import sqlite3
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("SELECT * from data where bikeid = ?", (bikeid,))
+    conn.commit()
+    result = c.fetchone()
+    if result:
+        return result
+    else:
+        return False
+    conn.close()
+
+def securitycode(bikeID, securitycode):
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
     c.execute("SELECT bikeid,securitycode from data where bikeid = ? AND securitycode = ?", (bikeid, securitycode))
     conn.commit()
-    if c.fetchone():
+    result = c.fetchone()
+    if result:
         return True
     else:
         return False
