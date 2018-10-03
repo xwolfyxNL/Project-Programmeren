@@ -35,6 +35,18 @@ def fetchpersonalinfo(bikeid):
         return False
     conn.close()
 
+def fetchtime(bikeid):
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("SELECT time from data where bikeid = ? AND checkedin = 1", (bikeid,))
+    conn.commit()
+    result = c.fetchone()
+    if result:
+        return result
+    else:
+        return False
+    conn.close()
+
 def securitycode(bikeid, securitycode):
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
