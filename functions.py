@@ -21,12 +21,10 @@ def securitycode(bikeid, securitycode):
     c = conn.cursor()
     c.execute("SELECT bikeid,securitycode from data where bikeid = ? AND securitycode = ?", (bikeid, securitycode))
     conn.commit()
-    print(c.fetchone())
-    result = c.fetchone()
-    if result == 'None':
-        return False
-    else:
+    if c.fetchone():
         return True
+    else:
+        return False
     conn.close()
 
 # Berry https://pypi.org/project/captcha/0.2.4/
