@@ -1,17 +1,27 @@
 import sqlite3
+import datetime
 
-def register():
+def register(bikeid, name, phonenumber, securitycode):
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("INSERT INTO data VALUES (?, ?, ?, ?, 0, '00:00:00 01-01-1990')", (bikeid, name, phonenumber, securitycode,))
+    conn.commit()
+    conn.close()
 
+def checkin(bikeid):
+    conn = sqlite3.connect('database.db')
+    curtime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    c = conn.cursor()
+    c.execute("UPDATE data SET checkedin = 1, time = ? WHERE bikeid = ?", (curtime, bikeid,))
+    conn.commit()
+    conn.close()
 
-def checkin(bikeID, name, phonenumber, Securitycode):
-        with open('database.csv', 'r') as csvfile:
-            csvreader = csv.reader(csvfile, delimiter=',')
-            line_count = 0
-            for line in csvreader:
-
-
-
-def checkout():
+def checkout(bikeid):
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("UPDATE data SET checkedin = 0 WHERE bikeid = ?", (bikeid,))
+    conn.commit()
+    conn.close()
 
 def fetchpersonalinfo(bikeid):
     conn = sqlite3.connect('database.db')
@@ -25,7 +35,7 @@ def fetchpersonalinfo(bikeid):
         return False
     conn.close()
 
-def securitycode(bikeID, securitycode):
+def securitycode(bikeid, securitycode):
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
     c.execute("SELECT bikeid,securitycode from data where bikeid = ? AND securitycode = ?", (bikeid, securitycode))
