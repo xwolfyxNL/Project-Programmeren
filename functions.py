@@ -1,5 +1,4 @@
-import csv
-
+import sqlite3
 
 def register():
 
@@ -16,7 +15,19 @@ def checkout():
 
 def fetchpersonalinfo():
 
-def securitycode():
+def securitycode(bikeid, securitycode):
+    import sqlite3
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("SELECT bikeid,securitycode from data where bikeid = ? AND securitycode = ?", (bikeid, securitycode))
+    conn.commit()
+    print(c.fetchone())
+    result = c.fetchone()
+    if result == 'None':
+        return False
+    else:
+        return True
+    conn.close()
 
 # Berry https://pypi.org/project/captcha/0.2.4/
 def captcha():
