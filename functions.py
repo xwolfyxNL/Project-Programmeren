@@ -16,8 +16,13 @@ def checkout():
 
 def fetchpersonalinfo():
 
+def securitycode():
+
+# Berry https://pypi.org/project/captcha/0.2.4/
 def captcha():
 
-def notification():
+# Berry https://github.com/pyotp/pyotp
+def twofactorauthentication:
 
-def securitycode():
+# Berry https://pythonhosted.org/python-pushover/
+def pushovernotification():

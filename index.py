@@ -6,5 +6,6 @@ if os.path.exists('database.csv') == False:
         filewriter = csv.writer(csvfile, delimiter=',',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
         filewriter.writerow(['bikeID', 'Name', 'Phonenumber', 'Securitycode', 'Registered', 'Time'])
+        print('Database has been created')
 else:
-    print('okay')
+    print('Database already exists')
