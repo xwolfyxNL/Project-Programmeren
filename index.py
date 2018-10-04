@@ -77,19 +77,21 @@ class Registreerpagina(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="Registreer je account", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
         def label(name):
             label = tk.Label(self, text=name, font=controller.title_font)
-            label.pack(side="top", fill="x", pady=10)
+            label.pack(side="top", fill="x", pady=5)
+        def labeltext(name):
+            label = tk.Label(self, text=name)
+            label.pack(side="top", fill="x")
+        label("Registreer je account")
 
-        label("Naam")
+        labeltext("Naam")
         naam = tk.Entry(self)
         naam.pack(pady=5)
-        label("Telefoonnummer")
+        labeltext("Telefoonnummer")
         tel = tk.Entry(self)
         tel.pack(pady=5)
-        label("Codewoord (Koe)")
+        labeltext("Codewoord (Voorbeeld: koe)")
         word = tk.Entry(self)
         word.pack(pady=5)
 
@@ -104,14 +106,12 @@ class Registreerpagina(tk.Frame):
                 showinfo(title='Warning', message=bericht)
             else:
                 bikeid = bikeid_generator()
-                label1 = tk.Label(self, text="", font=controller.title_font)
-                label1.pack(side="top", fill="x", pady=10)
-                label1.configure(text="Het account is aangemaakt. Uw unieke code is " + bikeid)
+                labeltext("Het account is aangemaakt. Uw unieke code is " + bikeid)
                 register(int(bikeid),naam,tel,word)
-            self.update()
+                clear_textbox()
 
 
-        registreer = tk.Button(self, text="Registreren", command=lambda: [clicked(naam.get(), tel.get(), word.get()),clear_textbox()], height=2, width=20)
+        registreer = tk.Button(self, text="Registreren", command=lambda: clicked(naam.get(), tel.get(), word.get()), height=2, width=20)
         registreer.pack(pady=5)
         button = tk.Button(self, text="Ga terug",
                           command=lambda: [controller.show_frame("StartPagina"),clear_textbox()],
@@ -124,11 +124,39 @@ class Incheckpagina(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="Check je fiets in", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        def label(name):
+            label = tk.Label(self, text=name, font=controller.title_font)
+            label.pack(side="top", fill="x", pady=5)
+        def labeltext(name):
+            label = tk.Label(self, text=name)
+            label.pack(side="top", fill="x")
+        label("Check je fiets in")
+
+        labeltext("Fiets nummer:")
+        bikeid = tk.Entry(self)
+        bikeid.pack(pady=5)
+
+        def clear_textbox():
+            bikeid.delete(0, 9999)
+        def clicked(bikeid):
+            if len(bikeid) == 0:
+                bericht = 'Vul het veld in!'
+                showinfo(title='Warning', message=bericht)
+            elif verifybikeid(bikeid) == False:
+                bericht = 'Fiets nummer klopt niet!'
+                showinfo(title='Warning', message=bericht)
+            elif verifyincheck(bikeid) == True:
+                bericht = 'Fiets is al ingechecked!'
+                showinfo(title='Warning', message=bericht)
+            else:
+                labeltext("De fiets is ingecheckt")
+                fietscheckin(bikeid)
+                clear_textbox()
+        checkin = tk.Button(self, text="Check je fiets in", command=lambda: clicked(bikeid.get()), height=2, width=20)
+        checkin.pack(pady=5)
         button = tk.Button(self, text="Ga terug",
-                           command=lambda: controller.show_frame("StartPagina"),
-                           height=2, width=20)
+                          command=lambda: [controller.show_frame("StartPagina"),clear_textbox()],
+                             height=2, width=20)
         button.pack()
 
 class Uitcheckpagina(tk.Frame):
@@ -136,11 +164,39 @@ class Uitcheckpagina(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="Check je fiets uit", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        def label(name):
+            label = tk.Label(self, text=name, font=controller.title_font)
+            label.pack(side="top", fill="x", pady=5)
+        def labeltext(name):
+            label = tk.Label(self, text=name)
+            label.pack(side="top", fill="x")
+        label("Check je fiets uit")
+
+        labeltext("Fiets nummer:")
+        bikeid = tk.Entry(self)
+        bikeid.pack(pady=5)
+
+        def clear_textbox():
+            bikeid.delete(0, 9999)
+        def clicked(bikeid):
+            if len(bikeid) == 0:
+                bericht = 'Vul het veld in!'
+                showinfo(title='Warning', message=bericht)
+            elif verifybikeid(bikeid) == False:
+                bericht = 'Fiets nummer klopt niet!'
+                showinfo(title='Warning', message=bericht)
+            elif verifyincheck(bikeid) == False:
+                bericht = 'Fiets is niet ingecheckt!'
+                showinfo(title='Warning', message=bericht)
+            else:
+                labeltext("De fiets is uitgecheckt!")
+                fietscheckout(bikeid)
+                clear_textbox()
+        checkin = tk.Button(self, text="Check je fiets uit", command=lambda: clicked(bikeid.get()), height=2, width=20)
+        checkin.pack(pady=5)
         button = tk.Button(self, text="Ga terug",
-                           command=lambda: controller.show_frame("StartPagina"),
-                           height=2, width=20)
+                          command=lambda: [controller.show_frame("StartPagina"),clear_textbox()],
+                             height=2, width=20)
         button.pack()
 
 class Infopagina(tk.Frame):
@@ -148,11 +204,45 @@ class Infopagina(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="Informatie NS fietsen stalling", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        def label(name):
+            label = tk.Label(self, text=name, font=controller.title_font)
+            label.pack(side="top", fill="x", pady=5)
+        def labeltext(name):
+            label = tk.Label(self, text=name)
+            label.pack(side="top", fill="x")
+        label("Info stalling")
+        labeltext("Openingstijden:")
+        labeltext("Maandag t/m Vrijdag 06:00 - 22:00")
+        labeltext("Zaterdag t/m Zondag 10:00 - 20:00")
+        label("Fiets info")
+        labeltext("Fiets nummer:")
+        bikeid = tk.Entry(self)
+        bikeid.pack(pady=5)
+
+        def clear_textbox():
+            bikeid.delete(0, 9999)
+        def clicked(bikeid):
+            if len(bikeid) == 0:
+                bericht = 'Vul het veld in!'
+                showinfo(title='Warning', message=bericht)
+            elif verifybikeid(bikeid) == False:
+                bericht = 'Fiets nummer klopt niet!'
+                showinfo(title='Warning', message=bericht)
+            else:
+                labeltext("Naam: " + fetchpersonalinfo(bikeid)[1])
+                labeltext("Telefoon nummer: " + fetchpersonalinfo(bikeid)[2])
+                if fetchpersonalinfo(bikeid)[4] == 1:
+                    labeltext("Ingecheckt: Ja")
+                    labeltext("Datum en tijd incheck: " + fetchpersonalinfo(bikeid)[5])
+                else:
+                    labeltext("Ingecheckt: Nee")
+
+                clear_textbox()
+        checkin = tk.Button(self, text="Check je fiets info", command=lambda: clicked(bikeid.get()), height=2, width=20)
+        checkin.pack(pady=5)
         button = tk.Button(self, text="Ga terug",
-                           command=lambda: controller.show_frame("StartPagina"),
-                           height=2, width=20)
+                          command=lambda: [controller.show_frame("StartPagina"),clear_textbox()],
+                             height=2, width=20)
         button.pack()
 
 if __name__ == "__main__":

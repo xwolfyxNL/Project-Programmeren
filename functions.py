@@ -13,7 +13,7 @@ def register(bikeid, name, phonenumber, securitycode):
     conn.commit()
     conn.close()
 
-def checkin(bikeid):
+def fietscheckin(bikeid):
     conn = sqlite3.connect('database.db')
     curtime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     c = conn.cursor()
@@ -21,10 +21,10 @@ def checkin(bikeid):
     conn.commit()
     conn.close()
 
-def checkout(bikeid):
+def fietscheckout(bikeid):
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
-    c.execute("UPDATE data SET checkedin = 0 WHERE bikeid = ?", (bikeid,))
+    c.execute("UPDATE data SET checkedin = 0, time = '00:00:00 01-01-1990' WHERE bikeid = ?", (bikeid,))
     conn.commit()
     conn.close()
 
@@ -36,6 +36,30 @@ def fetchpersonalinfo(bikeid):
     result = c.fetchone()
     if result:
         return result
+    else:
+        return False
+    conn.close()
+
+def verifybikeid(bikeid):
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("SELECT * from data where bikeid = ?", (bikeid,))
+    conn.commit()
+    result = c.fetchone()
+    if result:
+        return True
+    else:
+        return False
+    conn.close()
+
+def verifyincheck(bikeid):
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("SELECT * from data where bikeid = ? AND checkedin == 1", (bikeid,))
+    conn.commit()
+    result = c.fetchone()
+    if result:
+        return True
     else:
         return False
     conn.close()
