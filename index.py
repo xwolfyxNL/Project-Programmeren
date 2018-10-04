@@ -94,11 +94,7 @@ class Registreerpagina(tk.Frame):
         word.pack(pady=5)
 
         def clicked(naam, tel, word):
-            datatable.append(naam)
-            datatable.append(tel)
-            datatable.append(word)
-            print(datatable)
-            return datatable
+            register(int(bikeid_generator()),naam,tel,word)
 
         registreer = tk.Button(self, text="Registreren", command=lambda: clicked(naam.get(), tel.get(), word.get()), height=2, width=20)
         registreer.pack()
