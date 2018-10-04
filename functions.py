@@ -60,10 +60,10 @@ def securitycode(bikeid, securitycode):
     conn.close()
 
 # Berry https://pypi.org/project/captcha/0.2.4/
-def captcha():
+#def captcha():
 
 # Berry https://github.com/pyotp/pyotp
-def twofactorauthentication:
+#def twofactorauthentication:
 
 # Berry https://pythonhosted.org/python-pushover/
-def pushovernotification():
+#def pushovernotification():
