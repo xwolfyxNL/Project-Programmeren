@@ -15,14 +15,18 @@ if os.path.exists('database.db') == False:
     conn.close()
 else:
     print('Database exists')
-
+def button(name):
+    button = tk.Button(self, text=name,
+                       command=lambda: controller.show_frame("StartPagina"),
+                       height=2, width=20)
 # GUI
 class NSApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
-        self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
+        self.title_font = tkfont.Font(family='Helvetica', size=10, weight="bold", slant="italic")
+
 
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
@@ -46,49 +50,61 @@ class NSApp(tk.Tk):
 
 class StartPagina(tk.Frame):
 
+
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         label = tk.Label(self, text="NS fietsen stalling", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        button1 = tk.Button(self, text="Registeren",
-                            command=lambda: controller.show_frame("Registreerpagina"),
-                           height=2, width=20)
-        button2 = tk.Button(self, text="Inchecken",
-                            command=lambda: controller.show_frame("Incheckpagina"),
-                           height=2, width=20)
-        button3 = tk.Button(self, text="Uitchecken",
-                            command=lambda: controller.show_frame("Uitcheckpagina"),
-                           height=2, width=20)
-        button4 = tk.Button(self, text="Info",
-                            command=lambda: controller.show_frame("Infopagina"),
-                           height=2, width=20)
-        button1.pack(pady=5)
-        button2.pack(pady=5)
-        button3.pack(pady=5)
-        button4.pack(pady=5)
+
+        def button(name, page, h, w, pad):
+            button = tk.Button(self, text=name,
+                               command=lambda: controller.show_frame(page),
+                               height=h, width=w)
+            button.pack(pady=pad)
+
+        button("Registreren", "Registreerpagina", 2, 20, 5)
+        button("Inchecken", "Incheckpagina", 2, 20, 5)
+        button("Uitchecken", "Uitcheckpagina", 2, 20, 5)
+        button("Info", "Infopagina", 2, 20, 5)
 
 
 class Registreerpagina(tk.Frame):
-
+    s = StartPagina
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         label = tk.Label(self, text="Registreer je account", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
-        inputfield = tk.Entry(self)
-        inputfield.pack(pady=5)
-        inputfield.insert(0, "Naam")
-        inputfield2 = tk.Entry(self)
-        inputfield2.pack(pady=5)
-        inputfield2.insert(0, "Telefoon nummer")
-        inputfield3 = tk.Entry(self)
-        inputfield3.pack(pady=5)
-        inputfield3.insert(0, "Code woord (Koe)")
+        def label(name):
+            label = tk.Label(self, text=name, font=controller.title_font)
+            label.pack(side="top", fill="x", pady=10)
+
+        datatable = []
+        label("Naam")
+        naam = tk.Entry(self)
+        naam.pack(pady=5)
+        label("Telefoonnummer")
+        tel = tk.Entry(self)
+        tel.pack(pady=5)
+        label("Codewoord (Kak)")
+        word = tk.Entry(self)
+        word.pack(pady=5)
+
+        def clicked(naam, tel, word):
+            datatable.append(naam)
+            datatable.append(tel)
+            datatable.append(word)
+            print(datatable)
+            return datatable
+
+        registreer = tk.Button(self, text="Registreren", command=lambda: clicked(naam.get(), tel.get(), word.get()), height=2, width=20)
+        registreer.pack()
         button = tk.Button(self, text="Ga terug",
-                           command=lambda: controller.show_frame("StartPagina"),
-                           height=2, width=20)
+                          command=lambda: controller.show_frame("StartPagina"),
+                             height=2, width=20)
         button.pack()
 
 
