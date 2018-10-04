@@ -77,6 +77,15 @@ class Registreerpagina(tk.Frame):
         self.controller = controller
         label = tk.Label(self, text="Registreer je account", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
+        inputfield = tk.Entry(self)
+        inputfield.pack(pady=5)
+        inputfield.insert(0, "Naam")
+        inputfield2 = tk.Entry(self)
+        inputfield2.pack(pady=5)
+        inputfield2.insert(0, "Telefoon nummer")
+        inputfield3 = tk.Entry(self)
+        inputfield3.pack(pady=5)
+        inputfield3.insert(0, "Code woord (Koe)")
         button = tk.Button(self, text="Ga terug",
                            command=lambda: controller.show_frame("StartPagina"),
                            height=2, width=20)
