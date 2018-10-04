@@ -61,9 +61,10 @@ def securitycode(bikeid, securitycode):
 
 # Berry https://pypi.org/project/captcha/0.2.4/
 def captcha():
-
+    x=0
 # Berry https://github.com/pyotp/pyotp
 def twofactorauthentication:
-
+    x=0
 # Berry https://pythonhosted.org/python-pushover/
 def pushovernotification():
+    x= 0
