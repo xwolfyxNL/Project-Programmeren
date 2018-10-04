@@ -1,5 +1,10 @@
 import sqlite3
 import datetime
+import string
+import random
+
+def bikeid_generator(size=6, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
 
 def register(bikeid, name, phonenumber, securitycode):
     conn = sqlite3.connect('database.db')
