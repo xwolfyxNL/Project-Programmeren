@@ -1,6 +1,7 @@
 import os.path
 import tkinter as tk
 from functions import *
+from tkinter.messagebox import showinfo
 from tkinter import font as tkfont
 
 # Initial creation
@@ -82,24 +83,38 @@ class Registreerpagina(tk.Frame):
             label = tk.Label(self, text=name, font=controller.title_font)
             label.pack(side="top", fill="x", pady=10)
 
-        datatable = []
         label("Naam")
         naam = tk.Entry(self)
         naam.pack(pady=5)
         label("Telefoonnummer")
         tel = tk.Entry(self)
         tel.pack(pady=5)
-        label("Codewoord (Kak)")
+        label("Codewoord (Koe)")
         word = tk.Entry(self)
         word.pack(pady=5)
 
-        def clicked(naam, tel, word):
-            register(int(bikeid_generator()),naam,tel,word)
+        def clear_textbox():
+            naam.delete(0, 9999)
+            tel.delete(0, 9999)
+            word.delete(0, 9999)
 
-        registreer = tk.Button(self, text="Registreren", command=lambda: clicked(naam.get(), tel.get(), word.get()), height=2, width=20)
-        registreer.pack()
+        def clicked(naam, tel, word):
+            if len(naam) == 0 or len(tel) == 0 or len(word) == 0:
+                bericht = 'Vul alle velden in!'
+                showinfo(title='Warning', message=bericht)
+            else:
+                bikeid = bikeid_generator()
+                label1 = tk.Label(self, text="", font=controller.title_font)
+                label1.pack(side="top", fill="x", pady=10)
+                label1.configure(text="Het account is aangemaakt. Uw unieke code is " + bikeid)
+                register(int(bikeid),naam,tel,word)
+            self.update()
+
+
+        registreer = tk.Button(self, text="Registreren", command=lambda: [clicked(naam.get(), tel.get(), word.get()),clear_textbox()], height=2, width=20)
+        registreer.pack(pady=5)
         button = tk.Button(self, text="Ga terug",
-                          command=lambda: controller.show_frame("StartPagina"),
+                          command=lambda: [controller.show_frame("StartPagina"),clear_textbox()],
                              height=2, width=20)
         button.pack()
 
