@@ -6,6 +6,7 @@ import random
 def bikeid_generator(size=6, chars= string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
+
 def register(bikeid, name, phonenumber, securitycode):
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
@@ -76,7 +77,7 @@ def verifysecuritycode(bikeid, securitycode):
         return False
     conn.close()
 
-def idtobase32(bikeid):
+def id_to_base32(bikeid):
     value = ''
     bikeid = str(bikeid)
     for i in range(len(bikeid)):
