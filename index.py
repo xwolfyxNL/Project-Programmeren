@@ -94,9 +94,9 @@ class Registreerpagina(tk.Frame):
         word.pack(pady=5)
 
         def clear_textbox():
-            naam.delete(0, 9999)
-            tel.delete(0, 9999)
-            word.delete(0, 9999)
+            naam.delete(0, "end")
+            tel.delete(0, "end")
+            word.delete(0, "end")
 
         def clicked(naam, tel, word):
             if len(naam) == 0 or len(tel) == 0 or len(word) == 0:
@@ -135,7 +135,7 @@ class Incheckpagina(tk.Frame):
         bikeid.pack(pady=5)
 
         def clear_textbox():
-            bikeid.delete(0, 9999)
+            bikeid.delete(0, "end")
         def clicked(bikeid):
             if len(bikeid) == 0:
                 bericht = 'Vul het veld in!'
@@ -175,7 +175,7 @@ class Uitcheckpagina(tk.Frame):
         bikeid.pack(pady=5)
 
         def clear_textbox():
-            bikeid.delete(0, 9999)
+            bikeid.delete(0, "end")
         def clicked(bikeid):
             if len(bikeid) == 0:
                 bericht = 'Vul het veld in!'
@@ -218,7 +218,7 @@ class Infopagina(tk.Frame):
         bikeid.pack(pady=5)
 
         def clear_textbox():
-            bikeid.delete(0, 9999)
+            bikeid.delete(0, "end")
         def clicked(bikeid):
             if len(bikeid) == 0:
                 bericht = 'Vul het veld in!'
