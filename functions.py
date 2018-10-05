@@ -21,6 +21,9 @@ def fietscheckin(bikeid):
     conn.commit()
     conn.close()
 
+
+
+
 def fietscheckout(bikeid):
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
@@ -75,6 +78,14 @@ def verifysecuritycode(bikeid, securitycode):
     else:
         return False
     conn.close()
+
+def idtobase32(bikeid):
+    value = ''
+    bikeid = str(bikeid)
+    for i in range(len(bikeid)):
+        if int(bikeid[i]) >=2 and int(bikeid[i]) <= 7:
+            value += bikeid[i]
+    return value
 
 # Berry https://pypi.org/project/captcha/0.2.4/
 #def captcha():

@@ -14,10 +14,7 @@ if os.path.exists('database.db') == False:
     conn.close()
 else:
     print('Database exists')
-def button(name):
-    button = tk.Button(self, text=name,
-                       command=lambda: controller.show_frame("StartPagina"),
-                       height=2, width=20)
+
 # GUI
 class NSApp(tk.Tk):
 
