@@ -39,7 +39,6 @@ class NSApp(tk.Tk):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
-
             frame.grid(row=0, column=0, sticky="nsew")
 
         self.show_frame("StartPagina")
@@ -77,62 +76,66 @@ class Registreerpagina(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        def label(name):
-            label = tk.Label(self, text=name, font=controller.title_font)
-            label.pack(side="top", fill="x", pady=5)
-        def labeltext(name):
-            label = tk.Label(self, text=name)
-            label.pack(side="top", fill="x")
-        def popup(name):
-            bericht = name
-            showinfo(title='Message', message=bericht)
-        label("Registreer je account")
+        def updatemodel(self):
+            for widget in tk.Frame.winfo_children(self):
+                widget.destroy()
+            def label(name):
+                label = tk.Label(self, text=name, font=controller.title_font)
+                label.pack(side="top", fill="x", pady=5)
+            def labeltext(name):
+                label = tk.Label(self, text=name)
+                label.pack(side="top", fill="x")
+            def popup(name):
+                bericht = name
+                showinfo(title='Message', message=bericht)
+            label("Registreer je account")
 
-        labeltext("Naam")
-        naam = tk.Entry(self)
-        naam.pack(pady=5)
-        labeltext("Telefoonnummer")
-        tel = tk.Entry(self)
-        tel.pack(pady=5)
-        labeltext("Code woord (Voorbeeld: koe)")
-        word = tk.Entry(self)
-        word.pack(pady=5)
-        labeltext("Captcha:")
-        cptchkey, image = captcha()
-        img = ImageTk.PhotoImage(Image.open(image))
-        cptchkey = cptchkey
-        panel = tk.Label(self, image=img)
-        panel.image = img
-        panel.pack()
+            labeltext("Naam")
+            naam = tk.Entry(self)
+            naam.pack(pady=5)
+            labeltext("Telefoonnummer")
+            tel = tk.Entry(self)
+            tel.pack(pady=5)
+            labeltext("Code woord (Voorbeeld: koe)")
+            word = tk.Entry(self)
+            word.pack(pady=5)
+            labeltext("Captcha:")
+            cptchkey, image = captcha()
+            img = ImageTk.PhotoImage(Image.open(image))
+            cptchkey = cptchkey
+            panel = tk.Label(self, image=img)
+            panel.image = img
+            panel.pack()
 
-        key = tk.Entry(self)
-        key.pack(pady=5)
-
-
-        def clear_textbox():
-            naam.delete(0, "end")
-            tel.delete(0, "end")
-            word.delete(0, "end")
-            key.delete(0, "end")
-
-        def clicked(naam, tel, word, key):
-            if len(naam) == 0 or len(tel) == 0 or len(word) == 0 or len(key) == 0:
-                popup("Vul alle velden in!")
-            elif key.lower() != cptchkey:
-                popup("Captcha verkeerd ingevuld!")
-            else:
-                bikeid = bikeid_generator()
-                popup("Het account is aangemaakt. Uw unieke code is " + bikeid)
-                register(int(bikeid),naam,tel,word)
-                clear_textbox()
+            key = tk.Entry(self)
+            key.pack(pady=5)
 
 
-        registreer = tk.Button(self, text="Registreren", command=lambda: clicked(naam.get(), tel.get(), word.get(), key.get()), height=2, width=20)
-        registreer.pack(pady=5)
-        button = tk.Button(self, text="Ga terug",
-                          command=lambda: [controller.show_frame("StartPagina"),clear_textbox()],
-                             height=2, width=20)
-        button.pack()
+            def clear_textbox():
+                naam.delete(0, "end")
+                tel.delete(0, "end")
+                word.delete(0, "end")
+                key.delete(0, "end")
+
+            def clicked(naam, tel, word, key):
+                if len(naam) == 0 or len(tel) == 0 or len(word) == 0 or len(key) == 0:
+                    popup("Vul alle velden in!")
+                elif key.lower() != cptchkey:
+                    popup("Captcha verkeerd ingevuld!")
+                else:
+                    bikeid = bikeid_generator()
+                    popup("Het account is aangemaakt. Uw unieke code is " + bikeid)
+                    register(int(bikeid),naam,tel,word)
+                    clear_textbox()
+
+
+            registreer = tk.Button(self, text="Registreren", command=lambda: [clicked(naam.get(), tel.get(), word.get(), key.get()), updatemodel(self)], height=2, width=20)
+            registreer.pack(pady=5)
+            button = tk.Button(self, text="Ga terug",
+                              command=lambda: [controller.show_frame("StartPagina"),clear_textbox()],
+                                 height=2, width=20)
+            button.pack()
+        updatemodel(self)
 
 
 class Incheckpagina(tk.Frame):
@@ -140,185 +143,210 @@ class Incheckpagina(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        def label(name):
-            label = tk.Label(self, text=name, font=controller.title_font)
-            label.pack(side="top", fill="x", pady=5)
-        def labeltext(name):
-            label = tk.Label(self, text=name)
-            label.pack(side="top", fill="x")
-        def popup(name):
-            bericht = name
-            showinfo(title='Message', message=bericht)
-        label("Check je fiets in")
 
-        labeltext("Fiets nummer:")
-        bikeid = tk.Entry(self)
-        bikeid.pack(pady=5)
-        labeltext("Code woord:")
-        securitycode = tk.Entry(self)
-        securitycode.pack(pady=5)
-        labeltext("Captcha:")
-        cptchkey, image = captcha()
-        img = ImageTk.PhotoImage(Image.open(image))
+        def updatemodel(self):
+            for widget in tk.Frame.winfo_children(self):
+                widget.destroy()
+            def label(name):
+                label = tk.Label(self, text=name, font=controller.title_font)
+                label.pack(side="top", fill="x", pady=5)
 
-        panel = tk.Label(self, image=img)
-        panel.image = img
-        panel.pack()
+            def labeltext(name):
+                label = tk.Label(self, text=name)
+                label.pack(side="top", fill="x")
 
-        key = tk.Entry(self)
-        key.pack(pady=5)
+            def popup(name):
+                bericht = name
+                showinfo(title='Message', message=bericht)
 
-        def clear_textbox():
-            bikeid.delete(0, "end")
-            securitycode.delete(0, "end")
-            key.delete(0, "end")
-        def clicked(bikeid, securitycode, key):
-            if len(bikeid) == 0 or len(securitycode) == 0:
-                popup("Vul alle velden in!")
-            elif verifybikeid(bikeid) == False:
-                popup("Fiets nummer klopt niet!")
-            elif verifysecuritycode(bikeid, securitycode) == False:
-                popup("Code woord klopt niet!")
-            elif verifyincheck(bikeid) == True:
-                popup("Fiets is al ingechecked!")
-            elif key.lower() != cptchkey:
-                popup("Captcha verkeerd ingevuld!")
-            else:
-                popup("De fiets is ingecheckt")
-                fietscheckin(bikeid)
-                clear_textbox()
-        checkin = tk.Button(self, text="Check je fiets in", command=lambda: clicked(bikeid.get(), securitycode.get(), key.get()), height=2, width=20)
-        checkin.pack(pady=5)
-        button = tk.Button(self, text="Ga terug",
-                          command=lambda: [controller.show_frame("StartPagina"),clear_textbox()],
-                             height=2, width=20)
-        button.pack()
+            label("Check je fiets in")
+            labeltext("Fiets nummer:")
+            bikeid = tk.Entry(self)
+            bikeid.pack(pady=5)
+            labeltext("Code woord:")
+            securitycode = tk.Entry(self)
+            securitycode.pack(pady=5)
+            labeltext("Captcha:")
+            cptchkey = ''
+
+            cptchkey, image = captcha()
+            img = ImageTk.PhotoImage(Image.open(image))
+            print(cptchkey)
+
+            panel = tk.Label(self, image=img)
+            panel.image = img
+            panel.pack(pady=5)
+
+            key = tk.Entry(self)
+            key.pack(pady=5)
+
+            def clear_textbox():
+                bikeid.delete(0, "end")
+                securitycode.delete(0, "end")
+                key.delete(0, "end")
+
+            def clicked(bikeid, securitycode, key):
+                if len(bikeid) == 0 or len(securitycode) == 0:
+                    popup("Vul alle velden in!")
+                elif verifybikeid(bikeid) == False:
+                    popup("Fiets nummer klopt niet!")
+                elif verifysecuritycode(bikeid, securitycode) == False:
+                    popup("Code woord klopt niet!")
+                elif verifyincheck(bikeid) == True:
+                    popup("Fiets is al ingechecked!")
+                elif key.lower() != cptchkey:
+                    popup("Captcha verkeerd ingevuld!")
+                else:
+                    popup("De fiets is ingecheckt")
+                    fietscheckin(bikeid)
+                    clear_textbox()
+
+            checkin = tk.Button(self, text="Check je fiets in",
+                                command=lambda: [clicked(bikeid.get(), securitycode.get(), key.get()), updatemodel(self)], height=2,
+                                width=20)
+            checkin.pack(pady=5)
+            button = tk.Button(self, text="Ga terug",
+                               command=lambda: [controller.show_frame("StartPagina"), clear_textbox()],
+                               height=2, width=20)
+
+            button.pack()
+
+        updatemodel(self)
+
 
 class Uitcheckpagina(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        def label(name):
-            label = tk.Label(self, text=name, font=controller.title_font)
-            label.pack(side="top", fill="x", pady=5)
-        def labeltext(name):
-            label = tk.Label(self, text=name)
-            label.pack(side="top", fill="x")
-        def popup(name):
-            bericht = name
-            showinfo(title='Message', message=bericht)
-        label("Check je fiets uit")
+        def updatemodel(self):
+            for widget in tk.Frame.winfo_children(self):
+                widget.destroy()
+            def label(name):
+                label = tk.Label(self, text=name, font=controller.title_font)
+                label.pack(side="top", fill="x", pady=5)
+            def labeltext(name):
+                label = tk.Label(self, text=name)
+                label.pack(side="top", fill="x")
+            def popup(name):
+                bericht = name
+                showinfo(title='Message', message=bericht)
+            label("Check je fiets uit")
 
-        labeltext("Fiets nummer:")
-        bikeid = tk.Entry(self)
-        bikeid.pack(pady=5)
-        labeltext("Code woord:")
-        securitycode = tk.Entry(self)
-        securitycode.pack(pady=5)
+            labeltext("Fiets nummer:")
+            bikeid = tk.Entry(self)
+            bikeid.pack(pady=5)
+            labeltext("Code woord:")
+            securitycode = tk.Entry(self)
+            securitycode.pack(pady=5)
 
-        labeltext("Captcha:")
-        cptchkey, image = captcha()
-        img = ImageTk.PhotoImage(Image.open(image))
-        cptchkey = cptchkey
-        panel = tk.Label(self, image=img)
-        panel.image = img
-        panel.pack()
+            labeltext("Captcha:")
+            cptchkey, image = captcha()
+            img = ImageTk.PhotoImage(Image.open(image))
+            cptchkey = cptchkey
+            panel = tk.Label(self, image=img)
+            panel.image = img
+            panel.pack()
 
-        key = tk.Entry(self)
-        key.pack(pady=5)
-        def clear_textbox():
-            bikeid.delete(0, "end")
-            securitycode.delete(0, "end")
-            key.delete(0, "end")
+            key = tk.Entry(self)
+            key.pack(pady=5)
+            def clear_textbox():
+                bikeid.delete(0, "end")
+                securitycode.delete(0, "end")
+                key.delete(0, "end")
 
-        def clicked(bikeid, securitycode, key):
-            if len(bikeid) == 0 or len(securitycode) == 0:
-                popup("Vul alle velden in!")
-            elif verifybikeid(bikeid) == False:
-                popup("Fiets nummer klopt niet!")
-            elif verifysecuritycode(bikeid, securitycode) == False:
-                popup("Code woord klopt niet!")
-            elif verifyincheck(bikeid) == False:
-                popup("Fiets is niet ingecheckt!")
-            elif key.lower() != cptchkey:
-                popup("Captcha verkeerd ingevuld!")
-            else:
-                popup("De fiets is uitgecheckt!")
-                fietscheckout(bikeid)
-                clear_textbox()
-        checkin = tk.Button(self, text="Check je fiets uit", command=lambda: clicked(bikeid.get(), securitycode.get(), key.get()), height=2, width=20)
-        checkin.pack(pady=5)
-        button = tk.Button(self, text="Ga terug",
-                          command=lambda: [controller.show_frame("StartPagina"),clear_textbox()],
-                             height=2, width=20)
-        button.pack()
+            def clicked(bikeid, securitycode, key):
+                if len(bikeid) == 0 or len(securitycode) == 0:
+                    popup("Vul alle velden in!")
+                elif verifybikeid(bikeid) == False:
+                    popup("Fiets nummer klopt niet!")
+                elif verifysecuritycode(bikeid, securitycode) == False:
+                    popup("Code woord klopt niet!")
+                elif verifyincheck(bikeid) == False:
+                    popup("Fiets is niet ingecheckt!")
+                elif key.lower() != cptchkey:
+                    popup("Captcha verkeerd ingevuld!")
+                else:
+                    popup("De fiets is uitgecheckt!")
+                    fietscheckout(bikeid)
+                    clear_textbox()
+            checkin = tk.Button(self, text="Check je fiets uit", command=lambda: [clicked(bikeid.get(), securitycode.get(), key.get()), updatemodel(self)], height=2, width=20)
+            checkin.pack(pady=5)
+            button = tk.Button(self, text="Ga terug",
+                              command=lambda: [controller.show_frame("StartPagina"),clear_textbox()],
+                                 height=2, width=20)
+            button.pack()
+        updatemodel(self)
 
 class Infopagina(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        def label(name):
-            label = tk.Label(self, text=name, font=controller.title_font)
-            label.pack(side="top", fill="x", pady=5)
-        def labeltext(name):
-            label = tk.Label(self, text=name)
-            label.pack(side="top", fill="x")
-        def popup(name):
-            bericht = name
-            showinfo(title='Message', message=bericht)
-        label("Info stalling")
-        labeltext("Openingstijden:")
-        labeltext("Maandag t/m Vrijdag 06:00 - 22:00")
-        labeltext("Zaterdag t/m Zondag 10:00 - 20:00")
-        label("Fiets info")
-        labeltext("Fiets nummer:")
-        bikeid = tk.Entry(self)
-        bikeid.pack(pady=5)
-        labeltext("Code woord:")
-        securitycode = tk.Entry(self)
-        securitycode.pack(pady=5)
+        def updatemodel(self):
+            for widget in tk.Frame.winfo_children(self):
+                widget.destroy()
+            def label(name):
+                label = tk.Label(self, text=name, font=controller.title_font)
+                label.pack(side="top", fill="x", pady=5)
+            def labeltext(name):
+                label = tk.Label(self, text=name)
+                label.pack(side="top", fill="x")
+            def popup(name):
+                bericht = name
+                showinfo(title='Message', message=bericht)
+            label("Info stalling")
+            labeltext("Openingstijden:")
+            labeltext("Maandag t/m Vrijdag 06:00 - 22:00")
+            labeltext("Zaterdag t/m Zondag 10:00 - 20:00")
+            label("Fiets info")
+            labeltext("Fiets nummer:")
+            bikeid = tk.Entry(self)
+            bikeid.pack(pady=5)
+            labeltext("Code woord:")
+            securitycode = tk.Entry(self)
+            securitycode.pack(pady=5)
 
-        labeltext("Captcha:")
-        cptchkey, image = captcha()
-        img = ImageTk.PhotoImage(Image.open(image))
-        cptchkey = cptchkey
-        panel = tk.Label(self, image=img)
-        panel.image = img
-        panel.pack()
+            labeltext("Captcha:")
+            cptchkey, image = captcha()
+            img = ImageTk.PhotoImage(Image.open(image))
+            cptchkey = cptchkey
+            panel = tk.Label(self, image=img)
+            panel.image = img
+            panel.pack()
 
-        key = tk.Entry(self)
-        key.pack(pady=5)
+            key = tk.Entry(self)
+            key.pack(pady=5)
 
-        def clear_textbox():
-            bikeid.delete(0, "end")
-            securitycode.delete(0, "end")
-            key.delete(0, "end")
+            def clear_textbox():
+                bikeid.delete(0, "end")
+                securitycode.delete(0, "end")
+                key.delete(0, "end")
 
-        def clicked(bikeid, securitycode, key):
-            if len(bikeid) == 0 or len(securitycode) == 0:
-                popup("Vul alle velden in!")
-            elif verifybikeid(bikeid) == False:
-                popup("Fiets nummer klopt niet!")
-            elif verifysecuritycode(bikeid, securitycode) == False:
-                popup("Code woord klopt niet!")
-            elif key.lower() != cptchkey:
-                popup("Captcha verkeerd ingevuld!")
-                print(key + cptchkey)
-            else:
-                if fetchpersonalinfo(bikeid)[4] == 1:
-                    popup("Naam: " + fetchpersonalinfo(bikeid)[1] + "\n" + "Telefoon nummer: " + fetchpersonalinfo(bikeid)[2] + "\n" + "Ingecheckt: Ja" + "\n" + "Tijd en datum incheck: " + fetchpersonalinfo(bikeid)[5])
+            def clicked(bikeid, securitycode, key):
+                if len(bikeid) == 0 or len(securitycode) == 0:
+                    popup("Vul alle velden in!")
+                elif verifybikeid(bikeid) == False:
+                    popup("Fiets nummer klopt niet!")
+                elif verifysecuritycode(bikeid, securitycode) == False:
+                    popup("Code woord klopt niet!")
+                elif key.lower() != cptchkey:
+                    popup("Captcha verkeerd ingevuld!")
+                    print(key + cptchkey)
                 else:
-                    popup("Naam: " + fetchpersonalinfo(bikeid)[1] + "\n" + "Telefoon nummer: " + fetchpersonalinfo(bikeid)[2] + "\n" + "Ingecheckt: Nee")
+                    if fetchpersonalinfo(bikeid)[4] == 1:
+                        popup("Naam: " + fetchpersonalinfo(bikeid)[1] + "\n" + "Telefoon nummer: " + fetchpersonalinfo(bikeid)[2] + "\n" + "Ingecheckt: Ja" + "\n" + "Tijd en datum incheck: " + fetchpersonalinfo(bikeid)[5])
+                    else:
+                        popup("Naam: " + fetchpersonalinfo(bikeid)[1] + "\n" + "Telefoon nummer: " + fetchpersonalinfo(bikeid)[2] + "\n" + "Ingecheckt: Nee")
 
-                clear_textbox()
-        checkin = tk.Button(self, text="Check je fiets info", command=lambda: clicked(bikeid.get(), securitycode.get(), key.get()), height=2, width=20)
-        checkin.pack(pady=5)
-        button = tk.Button(self, text="Ga terug",
-                          command=lambda: [controller.show_frame("StartPagina"),clear_textbox()],
-                             height=2, width=20)
-        button.pack()
+                    clear_textbox()
+            checkin = tk.Button(self, text="Check je fiets info", command=lambda: [clicked(bikeid.get(), securitycode.get(), key.get()), updatemodel(self)], height=2, width=20)
+            checkin.pack(pady=5)
+            button = tk.Button(self, text="Ga terug",
+                              command=lambda: [controller.show_frame("StartPagina"),clear_textbox()],
+                                 height=2, width=20)
+            button.pack()
+        updatemodel(self)
 
 if __name__ == "__main__":
     app = NSApp()

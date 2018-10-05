@@ -19,5 +19,3 @@ def captcha():
     #print(file)         # 'test.png'       debugging!
 
     return text, file
-
-captcha()
