@@ -21,9 +21,6 @@ def fietscheckin(bikeid):
     conn.commit()
     conn.close()
 
-
-
-
 def fietscheckout(bikeid):
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
