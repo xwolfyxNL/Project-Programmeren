@@ -14,11 +14,7 @@ if os.path.exists('database.db') == False:
     conn.close()
 else:
     print('Database exists')
-def button(name):
-    button = tk.Button(self, text=name,
-                       command=lambda: controller.show_frame("StartPagina"),
-                       height=2, width=20)
-# GUI
+
 class NSApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
@@ -60,7 +56,7 @@ class StartPagina(tk.Frame):
 
         def button(name, page, h, w, pad):
             button = tk.Button(self, text=name,
-                               command=lambda: controller.show_frame(page),
+                               command=lambda:  controller.show_frame(page),
                                height=h, width=w)
             button.pack(pady=pad)
 
@@ -71,7 +67,6 @@ class StartPagina(tk.Frame):
 
 
 class Registreerpagina(tk.Frame):
-    s = StartPagina
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -158,7 +153,6 @@ class Incheckpagina(tk.Frame):
         button.pack()
 
 class Uitcheckpagina(tk.Frame):
-
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -173,10 +167,15 @@ class Uitcheckpagina(tk.Frame):
         labeltext("Fiets nummer:")
         bikeid = tk.Entry(self)
         bikeid.pack(pady=5)
-
+        labeltext("Security code:")
+        code = tk.Entry(self)
+        code.pack(pady=5)
+        codecounter = 0
         def clear_textbox():
             bikeid.delete(0, 9999)
-        def clicked(bikeid):
+            code.delete(0, 9999)
+        def clicked(bikeid, code):
+
             if len(bikeid) == 0:
                 bericht = 'Vul het veld in!'
                 showinfo(title='Warning', message=bericht)
@@ -186,12 +185,18 @@ class Uitcheckpagina(tk.Frame):
             elif verifyincheck(bikeid) == False:
                 bericht = 'Fiets is niet ingecheckt!'
                 showinfo(title='Warning', message=bericht)
+            elif not securitycode(bikeid, code):
+                bericht = 'Dat was niet de goede code!'
+                showinfo(title='Warning', message=bericht)
             else:
                 labeltext("De fiets is uitgecheckt!")
                 fietscheckout(bikeid)
                 clear_textbox()
-        checkin = tk.Button(self, text="Check je fiets uit", command=lambda: clicked(bikeid.get()), height=2, width=20)
+
+        checkin = tk.Button(self, text="Check je fiets uit", command=lambda: clicked(bikeid.get(), code.get(),
+                                                                                     ), height=2, width=20)
         checkin.pack(pady=5)
+
         button = tk.Button(self, text="Ga terug",
                           command=lambda: [controller.show_frame("StartPagina"),clear_textbox()],
                              height=2, width=20)
@@ -211,7 +216,7 @@ class Infopagina(tk.Frame):
         label("Info stalling")
         labeltext("Openingstijden:")
         labeltext("Maandag t/m Vrijdag 06:00 - 22:00")
-        labeltext("Zaterdag t/m Zondag 10:00 - 20:00")
+        labeltext("Zaterdag en Zondag 10:00 - 20:00")
         label("Fiets info")
         labeltext("Fiets nummer:")
         bikeid = tk.Entry(self)
@@ -219,6 +224,7 @@ class Infopagina(tk.Frame):
 
         def clear_textbox():
             bikeid.delete(0, 9999)
+
         def clicked(bikeid):
             if len(bikeid) == 0:
                 bericht = 'Vul het veld in!'
@@ -229,7 +235,7 @@ class Infopagina(tk.Frame):
             else:
                 labeltext("Naam: " + fetchpersonalinfo(bikeid)[1])
                 labeltext("Telefoon nummer: " + fetchpersonalinfo(bikeid)[2])
-                if fetchpersonalinfo(bikeid)[4] == 1:
+                if fetchpersonalinfo(bikeid)[4]:
                     labeltext("Ingecheckt: Ja")
                     labeltext("Datum en tijd incheck: " + fetchpersonalinfo(bikeid)[5])
                 else:
