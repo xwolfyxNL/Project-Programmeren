@@ -64,7 +64,7 @@ def verifyincheck(bikeid):
         return False
     conn.close()
 
-def securitycode(bikeid, securitycode):
+def verifysecuritycode(bikeid, securitycode):
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
     c.execute("SELECT bikeid,securitycode from data where bikeid = ? AND securitycode = ?", (bikeid, securitycode))
