@@ -92,14 +92,14 @@ class Registreerpagina(tk.Frame):
         labeltext("Telefoonnummer")
         tel = tk.Entry(self)
         tel.pack(pady=5)
-        labeltext("Codewoord (Voorbeeld: koe)")
+        labeltext("Code woord (Voorbeeld: koe)")
         word = tk.Entry(self)
         word.pack(pady=5)
 
         def clear_textbox():
-            naam.delete(0, 9999)
-            tel.delete(0, 9999)
-            word.delete(0, 9999)
+            naam.delete(0, "end")
+            tel.delete(0, "end")
+            word.delete(0, "end")
 
         def clicked(naam, tel, word):
             if len(naam) == 0 or len(tel) == 0 or len(word) == 0:
@@ -138,21 +138,28 @@ class Incheckpagina(tk.Frame):
         labeltext("Fiets nummer:")
         bikeid = tk.Entry(self)
         bikeid.pack(pady=5)
+        labeltext("Code woord:")
+        securitycode = tk.Entry(self)
+        securitycode.pack(pady=5)
 
         def clear_textbox():
-            bikeid.delete(0, 9999)
-        def clicked(bikeid):
-            if len(bikeid) == 0:
-                popup("Vul het veld in!")
+            bikeid.delete(0, "end")
+            securitycode.delete(0, "end")
+
+        def clicked(bikeid, securitycode):
+            if len(bikeid) == 0 or len(securitycode) == 0:
+                popup("Vul alle velden in!")
             elif verifybikeid(bikeid) == False:
                 popup("Fiets nummer klopt niet!")
+            elif verifysecuritycode(bikeid, securitycode) == False:
+                popup("Code woord klopt niet!")
             elif verifyincheck(bikeid) == True:
                 popup("Fiets is al ingechecked!")
             else:
                 popup("De fiets is ingecheckt")
                 fietscheckin(bikeid)
                 clear_textbox()
-        checkin = tk.Button(self, text="Check je fiets in", command=lambda: clicked(bikeid.get()), height=2, width=20)
+        checkin = tk.Button(self, text="Check je fiets in", command=lambda: clicked(bikeid.get(), securitycode.get()), height=2, width=20)
         checkin.pack(pady=5)
         button = tk.Button(self, text="Ga terug",
                           command=lambda: [controller.show_frame("StartPagina"),clear_textbox()],
@@ -178,21 +185,28 @@ class Uitcheckpagina(tk.Frame):
         labeltext("Fiets nummer:")
         bikeid = tk.Entry(self)
         bikeid.pack(pady=5)
+        labeltext("Code woord:")
+        securitycode = tk.Entry(self)
+        securitycode.pack(pady=5)
 
         def clear_textbox():
-            bikeid.delete(0, 9999)
-        def clicked(bikeid):
-            if len(bikeid) == 0:
-                popup("Vul het veld in!")
+            bikeid.delete(0, "end")
+            securitycode.delete(0, "end")
+
+        def clicked(bikeid, securitycode):
+            if len(bikeid) == 0 or len(securitycode) == 0:
+                popup("Vul alle velden in!")
             elif verifybikeid(bikeid) == False:
                 popup("Fiets nummer klopt niet!")
+            elif verifysecuritycode(bikeid, securitycode) == False:
+                popup("Code woord klopt niet!")
             elif verifyincheck(bikeid) == False:
                 popup("Fiets is niet ingecheckt!")
             else:
                 popup("De fiets is uitgecheckt!")
                 fietscheckout(bikeid)
                 clear_textbox()
-        checkin = tk.Button(self, text="Check je fiets uit", command=lambda: clicked(bikeid.get()), height=2, width=20)
+        checkin = tk.Button(self, text="Check je fiets uit", command=lambda: clicked(bikeid.get(), securitycode.get()), height=2, width=20)
         checkin.pack(pady=5)
         button = tk.Button(self, text="Ga terug",
                           command=lambda: [controller.show_frame("StartPagina"),clear_textbox()],
@@ -221,14 +235,21 @@ class Infopagina(tk.Frame):
         labeltext("Fiets nummer:")
         bikeid = tk.Entry(self)
         bikeid.pack(pady=5)
+        labeltext("Code woord:")
+        securitycode = tk.Entry(self)
+        securitycode.pack(pady=5)
 
         def clear_textbox():
-            bikeid.delete(0, 9999)
-        def clicked(bikeid):
-            if len(bikeid) == 0:
-                popup("Vul het veld in!")
+            bikeid.delete(0, "end")
+            securitycode.delete(0, "end")
+
+        def clicked(bikeid, securitycode):
+            if len(bikeid) == 0 or len(securitycode) == 0:
+                popup("Vul alle velden in!")
             elif verifybikeid(bikeid) == False:
                 popup("Fiets nummer klopt niet!")
+            elif verifysecuritycode(bikeid, securitycode) == False:
+                popup("Code woord klopt niet!")
             else:
                 if fetchpersonalinfo(bikeid)[4] == 1:
                     popup("Naam: " + fetchpersonalinfo(bikeid)[1] + "\n" + "Telefoon nummer: " + fetchpersonalinfo(bikeid)[2] + "\n" + "Ingecheckt: Ja" + "\n" + "Tijd en datum incheck: " + fetchpersonalinfo(bikeid)[5])
@@ -236,7 +257,7 @@ class Infopagina(tk.Frame):
                     popup("Naam: " + fetchpersonalinfo(bikeid)[1] + "\n" + "Telefoon nummer: " + fetchpersonalinfo(bikeid)[2] + "\n" + "Ingecheckt: Nee")
 
                 clear_textbox()
-        checkin = tk.Button(self, text="Check je fiets info", command=lambda: clicked(bikeid.get()), height=2, width=20)
+        checkin = tk.Button(self, text="Check je fiets info", command=lambda: clicked(bikeid.get(), securitycode.get()), height=2, width=20)
         checkin.pack(pady=5)
         button = tk.Button(self, text="Ga terug",
                           command=lambda: [controller.show_frame("StartPagina"),clear_textbox()],
