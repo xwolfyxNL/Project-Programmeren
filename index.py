@@ -81,6 +81,9 @@ class Registreerpagina(tk.Frame):
         def labeltext(name):
             label = tk.Label(self, text=name)
             label.pack(side="top", fill="x")
+        def popup(name):
+            bericht = name
+            showinfo(title='Message', message=bericht)
         label("Registreer je account")
 
         labeltext("Naam")
@@ -100,11 +103,10 @@ class Registreerpagina(tk.Frame):
 
         def clicked(naam, tel, word):
             if len(naam) == 0 or len(tel) == 0 or len(word) == 0:
-                bericht = 'Vul alle velden in!'
-                showinfo(title='Warning', message=bericht)
+                popup("Vul alle velden in!")
             else:
                 bikeid = bikeid_generator()
-                labeltext("Het account is aangemaakt. Uw unieke code is " + bikeid)
+                popup("Het account is aangemaakt. Uw unieke code is " + bikeid)
                 register(int(bikeid),naam,tel,word)
                 clear_textbox()
 
@@ -128,6 +130,9 @@ class Incheckpagina(tk.Frame):
         def labeltext(name):
             label = tk.Label(self, text=name)
             label.pack(side="top", fill="x")
+        def popup(name):
+            bericht = name
+            showinfo(title='Message', message=bericht)
         label("Check je fiets in")
 
         labeltext("Fiets nummer:")
@@ -138,16 +143,13 @@ class Incheckpagina(tk.Frame):
             bikeid.delete(0, "end")
         def clicked(bikeid):
             if len(bikeid) == 0:
-                bericht = 'Vul het veld in!'
-                showinfo(title='Warning', message=bericht)
+                popup("Vul het veld in!")
             elif verifybikeid(bikeid) == False:
-                bericht = 'Fiets nummer klopt niet!'
-                showinfo(title='Warning', message=bericht)
+                popup("Fiets nummer klopt niet!")
             elif verifyincheck(bikeid) == True:
-                bericht = 'Fiets is al ingechecked!'
-                showinfo(title='Warning', message=bericht)
+                popup("Fiets is al ingechecked!")
             else:
-                labeltext("De fiets is ingecheckt")
+                popup("De fiets is ingecheckt")
                 fietscheckin(bikeid)
                 clear_textbox()
         checkin = tk.Button(self, text="Check je fiets in", command=lambda: clicked(bikeid.get()), height=2, width=20)
@@ -168,6 +170,9 @@ class Uitcheckpagina(tk.Frame):
         def labeltext(name):
             label = tk.Label(self, text=name)
             label.pack(side="top", fill="x")
+        def popup(name):
+            bericht = name
+            showinfo(title='Message', message=bericht)
         label("Check je fiets uit")
 
         labeltext("Fiets nummer:")
@@ -178,16 +183,13 @@ class Uitcheckpagina(tk.Frame):
             bikeid.delete(0, "end")
         def clicked(bikeid):
             if len(bikeid) == 0:
-                bericht = 'Vul het veld in!'
-                showinfo(title='Warning', message=bericht)
+                popup("Vul het veld in!")
             elif verifybikeid(bikeid) == False:
-                bericht = 'Fiets nummer klopt niet!'
-                showinfo(title='Warning', message=bericht)
+                popup("Fiets nummer klopt niet!")
             elif verifyincheck(bikeid) == False:
-                bericht = 'Fiets is niet ingecheckt!'
-                showinfo(title='Warning', message=bericht)
+                popup("Fiets is niet ingecheckt!")
             else:
-                labeltext("De fiets is uitgecheckt!")
+                popup("De fiets is uitgecheckt!")
                 fietscheckout(bikeid)
                 clear_textbox()
         checkin = tk.Button(self, text="Check je fiets uit", command=lambda: clicked(bikeid.get()), height=2, width=20)
@@ -208,6 +210,9 @@ class Infopagina(tk.Frame):
         def labeltext(name):
             label = tk.Label(self, text=name)
             label.pack(side="top", fill="x")
+        def popup(name):
+            bericht = name
+            showinfo(title='Message', message=bericht)
         label("Info stalling")
         labeltext("Openingstijden:")
         labeltext("Maandag t/m Vrijdag 06:00 - 22:00")
@@ -221,19 +226,14 @@ class Infopagina(tk.Frame):
             bikeid.delete(0, "end")
         def clicked(bikeid):
             if len(bikeid) == 0:
-                bericht = 'Vul het veld in!'
-                showinfo(title='Warning', message=bericht)
+                popup("Vul het veld in!")
             elif verifybikeid(bikeid) == False:
-                bericht = 'Fiets nummer klopt niet!'
-                showinfo(title='Warning', message=bericht)
+                popup("Fiets nummer klopt niet!")
             else:
-                labeltext("Naam: " + fetchpersonalinfo(bikeid)[1])
-                labeltext("Telefoon nummer: " + fetchpersonalinfo(bikeid)[2])
                 if fetchpersonalinfo(bikeid)[4] == 1:
-                    labeltext("Ingecheckt: Ja")
-                    labeltext("Datum en tijd incheck: " + fetchpersonalinfo(bikeid)[5])
+                    popup("Naam: " + fetchpersonalinfo(bikeid)[1] + "\n" + "Telefoon nummer: " + fetchpersonalinfo(bikeid)[2] + "\n" + "Ingecheckt: Ja" + "\n" + "Tijd en datum incheck: " + fetchpersonalinfo(bikeid)[5])
                 else:
-                    labeltext("Ingecheckt: Nee")
+                    popup("Naam: " + fetchpersonalinfo(bikeid)[1] + "\n" + "Telefoon nummer: " + fetchpersonalinfo(bikeid)[2] + "\n" + "Ingecheckt: Nee")
 
                 clear_textbox()
         checkin = tk.Button(self, text="Check je fiets info", command=lambda: clicked(bikeid.get()), height=2, width=20)

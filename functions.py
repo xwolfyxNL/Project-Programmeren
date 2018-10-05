@@ -15,7 +15,7 @@ def register(bikeid, name, phonenumber, securitycode):
 
 def fietscheckin(bikeid):
     conn = sqlite3.connect('database.db')
-    curtime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    curtime = datetime.datetime.now().strftime("%H:%M:%S %Y-%m-%d")
     c = conn.cursor()
     c.execute("UPDATE data SET checkedin = 1, time = ? WHERE bikeid = ?", (curtime, bikeid,))
     conn.commit()
