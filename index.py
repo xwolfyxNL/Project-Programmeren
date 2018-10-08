@@ -115,6 +115,8 @@ class Registreerpagina(tk.Frame):
             def clicked(naam, tel, word, key):
                 if len(naam) == 0 or len(tel) == 0 or len(word) == 0 or len(key) == 0:
                     popup("Vul alle velden in!")
+                if not tel.isdigit():
+                    popup("Het telefoonnummer moet bestaan uit nummers!")
                 elif key.lower() != cptchkey:
                     popup("Captcha verkeerd ingevuld!")
                 else:
