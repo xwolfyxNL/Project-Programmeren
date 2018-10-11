@@ -52,7 +52,7 @@ class StartPagina(tk.Frame):
 
 
 
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller):  #initializes frame
         tk.Frame.__init__(self, parent)
         self.controller = controller
         label = tk.Label(self, text="NS fietsen stalling", font=controller.title_font)
@@ -73,23 +73,28 @@ class StartPagina(tk.Frame):
 
 class Registreerpagina(tk.Frame):
     s = StartPagina
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller):                 #initializes frame and calls update model once
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        def updatemodel(self):
-            for widget in tk.Frame.winfo_children(self):
+        def updatemodel(self):                              #update model allows to refresh the frame
+            for widget in tk.Frame.winfo_children(self):    #destroys all widgets
                 widget.destroy()
-            def label(name):
+
+            # fucntions for widgets
+            def label(name):                                  #creates a label in title letters with 'name' text
                 label = tk.Label(self, text=name, font=controller.title_font)
                 label.pack(side="top", fill="x", pady=5)
-            def labeltext(name):
+            def labeltext(name):                              #creates a label in small letters with 'name' text
                 label = tk.Label(self, text=name)
                 label.pack(side="top", fill="x")
             def popup(name):
                 bericht = name
-                showinfo(title='Message', message=bericht)
-            label("Registreer je account")
+                showinfo(title='Message', message=bericht)    #showinfo generates a popup function
+                                                              # made for cleanliness
 
+
+            #create all widgets
+            label("Registreer je account")
             labeltext("Naam")
             naam = tk.Entry(self)
             naam.pack(pady=5)
@@ -100,18 +105,17 @@ class Registreerpagina(tk.Frame):
             word = tk.Entry(self)
             word.pack(pady=5)
             labeltext("Captcha:")
-            cptchkey, image = captcha()
-            img = ImageTk.PhotoImage(Image.open(image))
+            cptchkey, image = captcha()                             #generates captcha key and value
+            img = ImageTk.PhotoImage(Image.open(image))             #creates picture value
             cptchkey = cptchkey
-            panel = tk.Label(self, image=img)
+            panel = tk.Label(self, image=img)                       #inserts picture in label
             panel.image = img
             panel.pack()
 
             key = tk.Entry(self)
             key.pack(pady=5)
 
-
-
+            # fucntion to dictate what happens when button is clicked
             def clicked(naam, tel, word, key):
                 if len(naam) == 0 or len(tel) == 0 or len(word) == 0 or len(key) == 0:
                     popup("Vul alle velden in!")
@@ -120,13 +124,17 @@ class Registreerpagina(tk.Frame):
                 elif key.lower() != cptchkey:
                     popup("Captcha verkeerd ingevuld!")
                 else:
-                    bikeid = bikeid_generator()
+                    bikeid = bikeid_generator()                 #generates a new id
                     popup("Het account is aangemaakt. Uw unieke code is " + bikeid)
-                    register(int(bikeid),naam,tel,word)
+                    register(int(bikeid),naam,tel,word)         #registers new person with the new id,
+                                                                # codeword and phonenumber
 
-
-
-            registreer = tk.Button(self, text="Registreren", command=lambda: [clicked(naam.get(), tel.get(), word.get(), key.get()), updatemodel(self)], height=2, width=20)
+            # command -button does this. lambda: -only when button is clicked.
+            # calls both clicked(inserted name, inserted number, inserted codeword) and updatemodel() to
+            # reload the page
+            registreer = tk.Button(self, text="Registreren", command=lambda: [clicked(naam.get(), tel.get(), word.get(),
+                                                                                      key.get()), updatemodel(self)],
+                                                                                            height=2, width=20)
             registreer.pack(pady=5)
             button = tk.Button(self, text="Ga terug",
                               command=lambda: [controller.show_frame("StartPagina"),updatemodel(self)],

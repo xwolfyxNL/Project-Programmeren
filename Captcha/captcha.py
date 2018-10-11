@@ -3,7 +3,7 @@ from random import *
 
 from claptcha import Claptcha
 
-def captcha():
+def captcha():          #generate a captcha with random letters with a length between min_char and max_char
     min_char = 4
     max_char = 7
     allchar = string.ascii_letters + string.digits

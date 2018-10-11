@@ -3,7 +3,7 @@ import datetime
 import string
 import random
 
-def bikeid_generator(size=6, chars= string.digits):
+def bikeid_generator(size=6, chars= string.digits):             #generates a string of 6 digits with a random function
     return ''.join(random.choice(chars) for _ in range(size))
 
 
@@ -41,7 +41,7 @@ def fetchpersonalinfo(bikeid):
         return False
     conn.close()
 
-def verifybikeid(bikeid):
+def verifybikeid(bikeid):                       #check if bike id exists
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
     c.execute("SELECT * from data where bikeid = ?", (bikeid,))
@@ -53,7 +53,7 @@ def verifybikeid(bikeid):
         return False
     conn.close()
 
-def verifyincheck(bikeid):
+def verifyincheck(bikeid):                      #check if bike id exists and is checked in
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
     c.execute("SELECT * from data where bikeid = ? AND checkedin == 1", (bikeid,))
@@ -65,7 +65,7 @@ def verifyincheck(bikeid):
         return False
     conn.close()
 
-def verifysecuritycode(bikeid, securitycode):
+def verifysecuritycode(bikeid, securitycode):  #check if security code is correct
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
     c.execute("SELECT bikeid,securitycode from data where bikeid = ? AND securitycode = ?", (bikeid, securitycode))
@@ -76,14 +76,6 @@ def verifysecuritycode(bikeid, securitycode):
     else:
         return False
     conn.close()
-
-def id_to_base32(bikeid):
-    value = ''
-    bikeid = str(bikeid)
-    for i in range(len(bikeid)):
-        if int(bikeid[i]) >=2 and int(bikeid[i]) <= 7:
-            value += bikeid[i]
-    return value
 
 # Berry https://pypi.org/project/captcha/0.2.4/
 #def captcha():
